@@ -2,7 +2,7 @@ name: Test CD
 
 on:
   push:
-    branches: [ master, auth ]
+    branches: [ master ]
 
 env:
   SERVER_HOST: 13.127.106.130
@@ -23,10 +23,10 @@ jobs:
         username: ${{ env.SERVER_USERNAME }}
         key: ${{ env.SSH_PRIVATE_KEY }}
         script: |
-          cd ~/back_spare_parts/
+          cd ~/projects/Tur_Agent_API
           git pull
           npm install
           npx prisma migrate dev
           npx prisma generate
           npm run build
-          pm2 restart back-spare
+          pm2 start dist/main.js --name tur-agent
