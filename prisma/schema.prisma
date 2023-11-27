@@ -1,0 +1,275 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admins
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email    String  @unique
+  name     String?
+  hash     String
+  hashedRt String?
+  isBlock  Boolean @default(false)
+
+  role    Role?   @relation(fields: [role_id], references: [id])
+  role_id String?
+
+  @@map("users")
+}
+
+model Role {
+  id          String       @id @default(dbgenerated("gen_random_uuid()"))
+  title       String       @unique
+  permissions Permission[] @default([product_view])
+  User        User[]
+
+  @@map("roles")
+}
+
+enum Permission {
+  special_create
+  special_view
+  special_update
+  special_delete
+
+  product_create
+  product_view
+  product_update
+  product_delete
+
+  order_create
+  order_view
+  order_update
+  order_delete
+
+  user_create
+  user_view
+  user_update
+  user_delete
+
+  role_create
+  role_view
+  role_update
+  role_delete
+
+  @@map("permissions")
+}
+
+// Image
+model Image {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  imageName String  @unique
+  unused    Boolean @default(true)
+
+  @@map("images")
+}
+
+// Country
+model Country {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name_en        String
+  name_ru        String
+  name_ne        String
+  name_id        String
+  description_en String?
+  description_ru String?
+  description_ne String?
+  description_id String?
+
+  Region   Region[]
+  Packages Package[]
+  Planning Planning[]
+
+  @@map("country")
+}
+
+// Region
+model Region {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images String[]
+
+  name_en        String
+  name_ru        String
+  name_ne        String
+  name_id        String
+  description_en String
+  description_ru String
+  description_ne String
+  description_id String
+
+  map String
+
+  country    Country @relation(fields: [country_id], references: [id])
+  country_id String
+
+  Packages      Package[]
+  Accommodation Accommodation[]
+
+  @@map("region")
+}
+
+// Packages
+model Package {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images String[]
+
+  name_en String
+  name_ru String
+  name_ne String
+  name_id String
+
+  description_en String
+  description_ru String
+  description_ne String
+  description_id String
+
+  notes_en String
+  notes_ru String
+  notes_ne String
+  notes_id String
+
+  price_en String
+  price_ru String
+  price_ne String
+  price_id String
+
+  duration_en String
+  duration_ru String
+  duration_ne String
+  duration_id String
+
+  type Type @default(Personal)
+
+  county    Country @relation(fields: [county_id], references: [id])
+  county_id String
+  region    Region  @relation(fields: [region_id], references: [id])
+  region_id String
+
+  Routes        Routes[]
+  Highlight     Highlight[]
+  Accommodation Accommodation[]
+
+  @@map("packege")
+}
+
+enum Type {
+  Personal
+  Group
+}
+
+model Routes {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name_en        String
+  name_ru        String
+  name_ne        String
+  name_id        String
+  description_en String
+  description_ru String
+  description_ne String
+  description_id String
+
+  package    Package @relation(fields: [package_id], references: [id])
+  package_id String
+
+  @@map("routes")
+}
+
+model Highlight {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  info_en String
+  info_ru String
+  info_ne String
+  info_id String
+
+  package    Package @relation(fields: [package_id], references: [id])
+  package_id String
+
+  @@map("Highlight")
+}
+
+model Accommodation {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  night    Int    @default(1)
+  hotel_en String
+  hotel_ru String
+  hotel_ne String
+  hotel_id String
+
+  region     Region  @relation(fields: [region_id], references: [id])
+  region_id  String
+  package    Package @relation(fields: [package_id], references: [id])
+  package_id String
+
+  @@map("Accommodation")
+}
+
+// Destinations 
+model Planning {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images String[]
+
+  name_en        String
+  name_ru        String
+  name_ne        String
+  name_id        String
+  description_en String
+  description_ru String
+  description_ne String
+  description_id String
+
+  county    Country @relation(fields: [county_id], references: [id])
+  county_id String
+
+  @@map("planning")
+}
+
+// Partners
+model Partner {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  image          String
+  name_en        String
+  name_ru        String
+  name_ne        String
+  name_id        String
+
+  @@map("partner")
+}

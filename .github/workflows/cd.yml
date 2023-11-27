@@ -1,0 +1,32 @@
+name: Test CD
+
+on:
+  push:
+    branches: [ master, auth ]
+
+env:
+  SERVER_HOST: 13.127.106.130
+  SERVER_USERNAME: ubuntu
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Connect to server and deploy changes
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ env.SERVER_HOST }}
+        username: ${{ env.SERVER_USERNAME }}
+        key: ${{ env.SSH_PRIVATE_KEY }}
+        script: |
+          cd ~/back_spare_parts/
+          git pull
+          npm install
+          npx prisma migrate dev
+          npx prisma generate
+          npm run build
+          pm2 restart back-spare
