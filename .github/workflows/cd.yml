@@ -2,7 +2,7 @@ name: Test CD
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   SERVER_HOST: 13.127.106.130
