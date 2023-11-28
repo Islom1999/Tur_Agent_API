@@ -28,7 +28,30 @@ export class CountryService {
 
   async findAll() {
     const model = await this._prisma.country.findMany({
-      orderBy: { id: 'asc' },
+      orderBy: { createdAt: 'asc' },
+      include: {
+        Region: {select: {
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }},
+        Packages: {select:{
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }},
+        Planning: {select:{
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }}
+      }
     });
 
     if (!model[0]) throw new HttpException('not found', HttpStatus.NOT_FOUND);
@@ -46,6 +69,29 @@ export class CountryService {
       orderBy: { createdAt: 'asc' },
       skip,
       take: limit,
+      include: {
+        Region: {select: {
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }},
+        Packages: {select:{
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }},
+        Planning: {select:{
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }}
+      }
     });
 
     if (!model[0]) throw new HttpException('not found', HttpStatus.NOT_FOUND);
@@ -54,7 +100,32 @@ export class CountryService {
   }
 
   async findOne(id: string) {
-    const model = await this._prisma.country.findUnique({ where: { id } });
+    const model = await this._prisma.country.findUnique({ 
+      where: { id }, 
+      include: {
+        Region: {select: {
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }},
+        Packages: {select:{
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }},
+        Planning: {select:{
+          id: true,
+          name_en:true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true,
+        }}
+      }
+    } );
     if (!model) throw new HttpException('not found', HttpStatus.NOT_FOUND);
     return model;
   }

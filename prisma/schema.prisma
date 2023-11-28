@@ -216,7 +216,7 @@ model Highlight {
 
   @@map("Highlight")
 }
-
+  
 model Accommodation {
   id        String   @id @default(dbgenerated("gen_random_uuid()"))
   createdAt DateTime @default(now())

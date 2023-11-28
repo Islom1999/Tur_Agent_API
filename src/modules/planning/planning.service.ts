@@ -32,7 +32,16 @@ export class PlanningService {
 
   async findAll() {
     const model = await this._prisma.planning.findMany({
-      orderBy: { id: 'asc' },
+      orderBy: { createdAt: 'asc' },
+      include: {
+        country:{select :{
+          id: true,
+          name_en: true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true
+        }}
+      }
     });
 
     if (!model[0]) throw new HttpException('not found', HttpStatus.NOT_FOUND);
@@ -50,6 +59,15 @@ export class PlanningService {
       orderBy: { createdAt: 'asc' },
       skip,
       take: limit,
+      include: {
+        country:{select :{
+          id: true,
+          name_en: true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true
+        }}
+      }
     });
 
     if (!model[0]) throw new HttpException('not found', HttpStatus.NOT_FOUND);
@@ -58,7 +76,18 @@ export class PlanningService {
   }
 
   async findOne(id: string) {
-    const model = await this._prisma.planning.findUnique({ where: { id } });
+    const model = await this._prisma.planning.findUnique({ 
+      where: { id }, 
+      include: {
+        country:{select :{
+          id: true,
+          name_en: true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true
+        }}
+      }
+    });
     if (!model) throw new HttpException('not found', HttpStatus.NOT_FOUND);
     return model;
   }

@@ -32,7 +32,7 @@ export class PackageService {
 
   async findAll() {
     const model = await this._prisma.package.findMany({
-      orderBy: { id: 'asc' },
+      orderBy: { createdAt: 'asc' },
     });
 
     if (!model[0]) throw new HttpException('not found', HttpStatus.NOT_FOUND);
@@ -58,7 +58,28 @@ export class PackageService {
   }
 
   async findOne(id: string) {
-    const model = await this._prisma.package.findUnique({ where: { id } });
+    const model = await this._prisma.package.findUnique({ 
+      where: { id },
+      include: {
+        country:{select :{
+          id: true,
+          name_en: true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true
+        }},
+        region:{select :{
+          id: true,
+          name_en: true,
+          name_ru: true,
+          name_ne: true,
+          name_id: true
+        }},
+        Routes: true,
+        Highlight: true,
+        Accommodation: true,
+      } 
+    });
     if (!model) throw new HttpException('not found', HttpStatus.NOT_FOUND);
     return model;
   }

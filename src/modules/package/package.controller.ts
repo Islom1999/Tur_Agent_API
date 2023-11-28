@@ -13,6 +13,7 @@ import { PackageDto } from './dto/package.dto';
 import { QueryDTO } from 'src/_query';
 import { ApiTags } from '@nestjs/swagger';
 import { PackageService } from './package.service';
+import { Public } from 'src/common/decorators';
 
 @ApiTags('Package')
 @Controller('package')
@@ -25,16 +26,19 @@ export class PackageController {
     return this._service.create(dto);
   }
 
+  @Public()
   @Get('')
   findAll() {
     return this._service.findAll();
   }
 
-  @Get('pagenatoin')
+  @Public()
+  @Get('pagination')
   findAllPercentage(@Query() queryDto: QueryDTO) {
     return this._service.findAllPercentage(queryDto);
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this._service.findOne(id);

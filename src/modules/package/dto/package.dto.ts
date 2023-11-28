@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from '@prisma/client';
+import { Routes, Type } from '@prisma/client';
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class PackageDto {
