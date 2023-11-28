@@ -8,6 +8,12 @@ import { ImageModule } from './modules/image/image.module';
 import { UserModule } from './modules/user/user.module';
 import { CountryModule } from './modules/country/country.module';
 import { RegionModule } from './modules/region/region.module';
+import { PlanningModule } from './modules/planning/planning.module';
+import { PartnerModule } from './modules/partner/partner.module';
+import { PackageModule } from './modules/package/package.module';
+import { RoutesModule } from './modules/routes/routes.module';
+import { HighlightModule } from './modules/highlight/highlight.module';
+import { AccommodationModule } from './modules/accommodation/accommodation.module';
 
 @Module({
   imports: [
@@ -20,6 +26,12 @@ import { RegionModule } from './modules/region/region.module';
     RegionModule,
     RoleModule,
     UserModule,
+    PlanningModule,
+    PartnerModule,
+    PackageModule,
+    RoutesModule,
+    HighlightModule,
+    AccommodationModule,
     ImageModule,
   ],
   controllers: [],

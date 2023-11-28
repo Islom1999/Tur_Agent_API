@@ -14,10 +14,13 @@ export class ImageService {
 
   // utils
   async changeImageUsed(imageName: string): Promise<void> {
-    await this._prisma.image.update({
-      where: { imageName },
-      data: { unused: false },
-    });
+    try {
+      await this._prisma.image.update({
+        where: { imageName }, 
+        data: { unused: false },
+      });
+    } catch (error) {      
+    }
   }
 
   async changeImagesUsed(imageNames: string[]): Promise<void> {

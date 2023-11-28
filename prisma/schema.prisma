@@ -123,8 +123,8 @@ model Region {
   country    Country @relation(fields: [country_id], references: [id])
   country_id String
 
-  Packages      Package[]
   Accommodation Accommodation[]
+  Package       Package[]
 
   @@map("region")
 }
@@ -164,10 +164,10 @@ model Package {
 
   type Type @default(Personal)
 
-  county    Country @relation(fields: [county_id], references: [id])
-  county_id String
-  region    Region  @relation(fields: [region_id], references: [id])
-  region_id String
+  country    Country @relation(fields: [country_id], references: [id])
+  country_id String
+  region     Region? @relation(fields: [region_id], references: [id])
+  region_id  String?
 
   Routes        Routes[]
   Highlight     Highlight[]
@@ -253,8 +253,8 @@ model Planning {
   description_ne String
   description_id String
 
-  county    Country @relation(fields: [county_id], references: [id])
-  county_id String
+  country    Country @relation(fields: [country_id], references: [id])
+  country_id String
 
   @@map("planning")
 }
@@ -265,11 +265,11 @@ model Partner {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  image          String
-  name_en        String
-  name_ru        String
-  name_ne        String
-  name_id        String
+  image   String
+  name_en String
+  name_ru String
+  name_ne String
+  name_id String
 
   @@map("partner")
 }

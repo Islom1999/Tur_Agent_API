@@ -29,4 +29,4 @@ jobs:
           npx prisma migrate dev
           npx prisma generate
           npm run build
-          pm2 start dist/main.js --name tur-agent
+          pm2 restart tur-agent
