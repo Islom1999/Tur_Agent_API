@@ -26,16 +26,16 @@ import { ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private service: UserService) {}
 
-  @Permissions('user_create')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('user_create')
+  // @UseGuards(PermissionsGuard)
   @HttpCode(HttpStatus.OK)
   @Post('create')
   async createUser(@Body() userDto: CreateUserDto): Promise<User> {
     return this.service.createUser(userDto);
   }
 
-  @Permissions('user_view')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('user_view')
+  // @UseGuards(PermissionsGuard)
   @HttpCode(HttpStatus.OK)
   @Get()
   async getAll(@Query() queryDto: QueryDTO): Promise<User[]> {
@@ -50,16 +50,16 @@ export class UserController {
     return this.service.getPermissionByToken(userId);
   }
 
-  @Permissions('user_view')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('user_view')
+  // @UseGuards(PermissionsGuard)
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   async getById(@Param('id') id: string): Promise<User> {
     return this.service.getById(id);
   }
 
-  @Permissions('user_update')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('user_update')
+  // @UseGuards(PermissionsGuard)
   @HttpCode(HttpStatus.OK)
   @Put(':id')
   async addRoleById(
@@ -69,8 +69,8 @@ export class UserController {
     return this.service.addRoleById(id, roleIdDto);
   }
 
-  @Permissions('user_update')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('user_update')
+  // @UseGuards(PermissionsGuard)
   @HttpCode(HttpStatus.OK)
   @Post('/password/update/:id')
   async updatePasswordUser(
@@ -80,16 +80,16 @@ export class UserController {
     return this.service.updatePasswordUser(id, userPassword);
   }
 
-  @Permissions('user_update')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('user_update')
+  // @UseGuards(PermissionsGuard)
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
   async removeRoleById(@Param('id') id: string): Promise<User> {
     return this.service.removeRoleById(id);
   }
 
-  @Permissions('user_update')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('user_update')
+  // @UseGuards(PermissionsGuard)
   @HttpCode(HttpStatus.OK)
   @Post('block/:id')
   async blockUserById(

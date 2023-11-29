@@ -21,43 +21,43 @@ import { ApiTags } from '@nestjs/swagger';
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
-  @Permissions('role_create')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('role_create')
+  // @UseGuards(PermissionsGuard)
   @Post()
   create(@Body() roleDto: RoleDto) {
     return this.roleService.create(roleDto);
   } 
 
-  @Permissions('role_view')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('role_view')
+  // @UseGuards(PermissionsGuard)
   @Get('')
   findAll() {
     return this.roleService.findAll();
   }
 
-  @Permissions('role_view')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('role_view')
+  // @UseGuards(PermissionsGuard)
   @Get('percentage')
   findAllPercentage(@Query() queryDto: QueryDTO) {
     return this.roleService.findAllPercentage(queryDto);
   }
 
-  @Permissions('role_view')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('role_view')
+  // @UseGuards(PermissionsGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.roleService.findOne(id);
   }
 
-  @Permissions('role_update')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('role_update')
+  // @UseGuards(PermissionsGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() roleDto: RoleDto) {
     return this.roleService.update(id, roleDto);
   }
 
-  @Permissions('role_delete')
-  @UseGuards(PermissionsGuard)
+  // @Permissions('role_delete')
+  // @UseGuards(PermissionsGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.roleService.remove(id);
