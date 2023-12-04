@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To'lov Sahifasi</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* Bu yerda karta elementlari uchun CSS uslublari qo'shilishi mumkin */
+        .card-element {
+            width: 300px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="payment-form">
+        <div id="card-element" class="card-element">
+            <!-- Karta ma'lumotlari kiritish elementi bu yerga joylashtiriladi -->
+        </div>
+        <button type="submit">To'lash</button>
+    </form>
+
+    <script>
+        var stripe = Stripe('pk_test_51OCbx4FBGNy066Ev3I1yGpFP0zraCHokjmCEWPjMlEdKM1sZorlLerc7OyAso4hYf4JBEfuz8a2kYi5Cn8OTsFKs006BSI5xst');
+        var elements = stripe.elements();
+        var cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(cardElement).then(function (result) {
+                if (result.error) {
+                    // Bu yerda foydalanuvchiga xato haqida xabar berish
+                } else {
+                    // Tokenni serverga yuborish
+                    submitTokenToServer(result.token);
+                }
+            });
+        });
+
+        function submitTokenToServer(token) {
+            fetch('http://localhost:3002/api/order/charge', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1YTBlM2I4My1lMjEyLTRkOTctYjkwMi0wMjQ1ZjI1YWYzN2QiLCJlbWFpbCI6ImlzbG9ta2FyaW1vdmFsaXNoZXJvdmljaEBnbWFpbC5jb20iLCJpYXQiOjE3MDE2MDA5OTksImV4cCI6MTcwMTY4NzM5OX0.WEY7MUSWFAbUtwl4L5baEE3mIDg0Xjn1iwWin8xaYw4'
+                },
+                body: JSON.stringify({
+                    token: token.id,
+                    order_id: "1abe84b8-ae2a-47b5-bbb2-461c6c6bed9f"
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Bu yerda JSON formatidagi javobni qaytaradi
+                    } else {
+                        throw new Error('Network javobini qaytarishda xatolik yuz berdi');
+                    }
+                })
+                .then(data => {
+                    console.log('Tolov muvaffaqiyatli amalga oshirildi');
+                    // Bu yerda muvaffaqiyatli to'lovga oid harakatlar
+                })
+                .catch(error => {
+                    console.error('Xatolik yuz berdi:', error);
+                    // Bu yerda xatoliklarni boshqarish
+                });
+        }
+
+    </script>
+</body>
+
+</html>

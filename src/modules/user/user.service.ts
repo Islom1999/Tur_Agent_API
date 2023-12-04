@@ -11,13 +11,13 @@ import { BlockStatusDto } from './dto/block.status.user';
 import { RoleType } from 'src/enumerations';
 import { QueryDTO } from 'src/_query';
 import { CreateUserDto, UpdatePasswordDto } from 'src/auth/dto';
-import { AuthService } from 'src/auth/auth.service';
+import { AdminService } from 'src/auth/admin/admin.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private _prisma: PrismaService,
-    private _authService: AuthService,
+    private _authService: AdminService,
   ) {}
 
   async createUser(user: CreateUserDto): Promise<User> {

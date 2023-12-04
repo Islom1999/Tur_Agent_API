@@ -172,6 +172,7 @@ model Package {
   Routes        Routes[]
   Highlight     Highlight[]
   Accommodation Accommodation[]
+  Order         Order[]
 
   @@map("packege")
 }
@@ -216,7 +217,7 @@ model Highlight {
 
   @@map("Highlight")
 }
-  
+
 model Accommodation {
   id        String   @id @default(dbgenerated("gen_random_uuid()"))
   createdAt DateTime @default(now())
@@ -272,4 +273,81 @@ model Partner {
   name_id String
 
   @@map("partner")
+}
+
+// User Clients
+model Client {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  firstname String?
+  lastname  String?
+  phone     String?
+  hash      String?
+  hashedRt  String?
+  isBlock   Boolean  @default(false)
+
+  verificationCode        String?
+  verificationCodeExpires DateTime?
+  isEmailVerified         Boolean   @default(false)
+
+  passwordResetCode    String?
+  passwordResetExpires DateTime?
+  Order                Order[]
+  Payment              Payment[]
+
+  @@map("clients")
+}
+
+model Order {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status StatusType @default(Waiting)
+  amount Int
+  person Int?
+  description String?
+  code   String?
+  date   String?
+
+  client    Client @relation(fields: [client_id], references: [id])
+  client_id String
+
+  package    Package?  @relation(fields: [package_id], references: [id])
+  package_id String?
+  Payment    Payment[]
+
+  @@map("orders")
+}
+
+enum StatusType {
+  Waiting
+  Success
+}
+
+model Payment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  status      PaymentType @default(Success)
+  amount      Int
+  currency    String
+  description String?
+  charge_id   String?
+
+  client    Client @relation(fields: [client_id], references: [id])
+  client_id String
+  order     Order  @relation(fields: [order_id], references: [id])
+  order_id  String
+
+  @@map("payment")
+}
+
+enum PaymentType {
+  Waiting
+  Error
+  Success
 }

@@ -1,30 +1,26 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma';
-import {
-  AuthDto,
-  CreateUserDto,
-  UpdatePasswordDto,
-} from './dto';
-import * as argon from 'argon2';
-import { JwtPayload, Tokens } from './types';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Prisma, User, Role } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma';
+import { AuthDto, CreateUserDto, UpdatePasswordDto } from '../dto';
+import { JwtPayload, Tokens } from '../types';
+import * as argon from 'argon2';
 import { RoleType } from 'src/enumerations';
-import { baseUser, roleSuperAdmin } from './role-data';
-import { IFacebookClient, IGoogleClient, MailService } from 'src/base';
+import { Prisma, User, Role } from '@prisma/client';
+import { baseUser, roleSuperAdmin } from '../role-data';
 
 @Injectable()
-export class AuthService {
+export class AdminService {
   url = '';
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
     private config: ConfigService,
-    private mailService: MailService,
   ) {
     this.url = config.get<string>('APP_URL');
   }
+
+  // admin controller methods
 
   async signupLocal(dto: AuthDto): Promise<Tokens> {
     try {
@@ -50,42 +46,6 @@ export class AuthService {
       }
       throw error;
     }
-  }
-
-  // create user
-  async createUser(dto: CreateUserDto): Promise<User> {
-    try {
-      const hash = await argon.hash(dto.password);
-      const role_id = dto.role_id || '';
-
-      let _role = await this.prisma.role.findUnique({ where: { id: role_id } });
-      if (!_role) {
-        _role = await this.addRole(RoleType.BASE_USER);
-      }
-
-      const newUser = await this.prisma.user.create({
-        data: { email: dto.email, hash, role_id: _role.id, name: dto.name },
-        include: {
-          role: true,
-        },
-      });
-      const tokens = await this.getTokens(newUser.id, newUser.email);
-      await this.updateRtHash(newUser.id, tokens.refresh_token);
-
-      return newUser;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002')
-          throw new ForbiddenException('Credentials incorrect');
-      }
-      throw error;
-    }
-  }
-
-  // update password
-  async updateUserPassword(id: string, dto: UpdatePasswordDto): Promise<User> {
-    const hash = await argon.hash(dto.password);
-    return this.prisma.user.update({ where: { id }, data: { hash } });
   }
 
   // async signupGoogle()
@@ -146,6 +106,45 @@ export class AuthService {
     return tokens;
   }
 
+  // Any controller methods
+
+  // update password user by Admin
+  async updateUserPassword(id: string, dto: UpdatePasswordDto): Promise<User> {
+    const hash = await argon.hash(dto.password);
+    return this.prisma.user.update({ where: { id }, data: { hash } });
+  }
+  // create user by Admin
+  async createUser(dto: CreateUserDto): Promise<User> {
+    try {
+      const hash = await argon.hash(dto.password);
+      const role_id = dto.role_id || '';
+
+      let _role = await this.prisma.role.findUnique({ where: { id: role_id } });
+      if (!_role) {
+        _role = await this.addRole(RoleType.BASE_USER);
+      }
+
+      const newUser = await this.prisma.user.create({
+        data: { email: dto.email, hash, role_id: _role.id, name: dto.name },
+        include: {
+          role: true,
+        },
+      });
+      const tokens = await this.getTokens(newUser.id, newUser.email);
+      await this.updateRtHash(newUser.id, tokens.refresh_token);
+
+      return newUser;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002')
+          throw new ForbiddenException('Credentials incorrect');
+      }
+      throw error;
+    }
+  }
+
+  // Functions for Service
+
   async updateRtHash(userId: string, rt: string | undefined): Promise<void> {
     const hash = await argon.hash(rt);
     await this.prisma.user.update({
@@ -157,8 +156,6 @@ export class AuthService {
       },
     });
   }
-
-  // functions
 
   async getTokens(userId: string, email: string): Promise<Tokens> {
     const jwtPayload: JwtPayload = {

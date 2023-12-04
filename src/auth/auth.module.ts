@@ -1,25 +1,30 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
 import { PrismaModule } from 'src/prisma';
 import {
   AtStrategy,
+  FacebookStrategy,
   RtStrategy,
+  GoogleStrategy,
 } from './strategies';
 import { JwtModule } from '@nestjs/jwt';
 import { BaseModule } from 'src/base/module/baseModule';
+import { ClientModule } from './client/client.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   providers: [
-    AuthService,
     RtStrategy,
     AtStrategy,
+    GoogleStrategy,
+    FacebookStrategy,
   ],
-  controllers: [AuthController],
+  controllers: [],
   imports: [
     PrismaModule,
     JwtModule.register({}),
     BaseModule,
+    ClientModule,
+    AdminModule,
   ],
   exports: [],
 })

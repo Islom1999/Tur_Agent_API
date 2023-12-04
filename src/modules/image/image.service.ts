@@ -9,7 +9,7 @@ export class ImageService {
   // controller
   async uploadImage(file: any, url: string): Promise<{ url: string, filename: string }> {
     await this._prisma.image.create({ data: { imageName: file.filename } });
-    return { url: `/api/image/${file.filename}`, filename: file.filename };
+    return { url: `${url}/api/image/${file.filename}`, filename: file.filename };
   }
 
   // utils

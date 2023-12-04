@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { RoleModule } from './modules/role/role.module';
@@ -14,6 +13,8 @@ import { PackageModule } from './modules/package/package.module';
 import { RoutesModule } from './modules/routes/routes.module';
 import { HighlightModule } from './modules/highlight/highlight.module';
 import { AccommodationModule } from './modules/accommodation/accommodation.module';
+import { BilingModule } from './modules/billing/billing.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AccommodationModule } from './modules/accommodation/accommodation.modul
     HighlightModule,
     AccommodationModule,
     ImageModule,
+    BilingModule,
   ],
   controllers: [],
   providers: [
