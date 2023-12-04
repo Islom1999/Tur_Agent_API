@@ -41,7 +41,11 @@ export class RoutesService {
     const page = +queryDto.page || 1;
     const limit = +queryDto.limit || 25;
     const skip = (page - 1) * limit;
-    const count = await this._prisma.routes.count();
+    const count = await this._prisma.routes.count({
+      where: {
+        package_id: queryDto.id
+      },
+    });
 
     const model = await this._prisma.routes.findMany({
       where: {
