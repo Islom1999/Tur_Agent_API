@@ -10,4 +10,8 @@ export class QueryDTO {
 
   @IsOptional()
   limit?: number | string;
+
+  @IsOptional()
+  @IsString()
+  id?:string; 
 }

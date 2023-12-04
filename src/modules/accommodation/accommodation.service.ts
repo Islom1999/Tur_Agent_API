@@ -44,6 +44,9 @@ export class AccommodationService {
     const count = await this._prisma.accommodation.count();
 
     const model = await this._prisma.accommodation.findMany({
+      where: {
+        package_id: queryDto.id
+      },
       orderBy: { createdAt: 'asc' },
       skip,
       take: limit,

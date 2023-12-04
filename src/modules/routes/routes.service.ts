@@ -44,6 +44,9 @@ export class RoutesService {
     const count = await this._prisma.routes.count();
 
     const model = await this._prisma.routes.findMany({
+      where: {
+        package_id: queryDto.id
+      },
       orderBy: { createdAt: 'asc' },
       skip,
       take: limit,

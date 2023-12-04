@@ -44,6 +44,9 @@ export class HighlightService {
     const count = await this._prisma.highlight.count();
 
     const model = await this._prisma.highlight.findMany({
+      where: {
+        package_id: queryDto.id
+      },
       orderBy: { createdAt: 'asc' },
       skip,
       take: limit,
