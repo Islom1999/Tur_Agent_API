@@ -38,5 +38,49 @@ export class BilingController {
     return this.paymentService.createCharge(dto, userId);
   }
 
+  @Public()
+  @Get('')
+  findAll() {
+    return this.paymentService.findAll();
+  }
+
+  @Public()
+  @Get('pagination')
+  findAllPercentage(@Query() queryDto: QueryDTO) {
+    return this.paymentService.findAllPercentage(queryDto);
+  }
+
+  @Public()
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.paymentService.findOne(id);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() dto: BilingDto) {
+    return this.paymentService.update(id, dto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.paymentService.remove(id);
+  }
+
+  // client methods
+  // @Public()
+  @Get('clinet')
+  findAllClient(@GetCurrentUserId() userId: string) {
+    return this.paymentService.findAllClinet(userId);
+  }
+
+  // @Public()
+  @Get('/clinet/pagination')
+  findAllPercentageClinet(
+    @Query() queryDto: QueryDTO,
+    @GetCurrentUserId() userId: string
+  ) {
+    return this.paymentService.findAllPercentageClinet(queryDto, userId);
+  }
+
 
 }
