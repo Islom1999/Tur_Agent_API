@@ -53,10 +53,17 @@ export class RegionService {
     const page = +queryDto.page || 1;
     const limit = +queryDto.limit || 25;
     const skip = (page - 1) * limit;
-    const count = await this._prisma.region.count();
+    const count = await this._prisma.region.count({
+      where: {
+        country_id: queryDto?.id
+      },
+    });
 
     const model = await this._prisma.region.findMany({
       orderBy: { createdAt: 'asc' },
+      where: {
+        country_id: queryDto?.id
+      },
       skip,
       take: limit,
       include: {

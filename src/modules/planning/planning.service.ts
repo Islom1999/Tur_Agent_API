@@ -53,10 +53,17 @@ export class PlanningService {
     const page = +queryDto.page || 1;
     const limit = +queryDto.limit || 25;
     const skip = (page - 1) * limit;
-    const count = await this._prisma.planning.count();
+    const count = await this._prisma.planning.count({
+      where: {
+        country_id: queryDto?.id
+      },
+    });
 
     const model = await this._prisma.planning.findMany({
       orderBy: { createdAt: 'asc' },
+      where: {
+        country_id: queryDto?.id
+      },
       skip,
       take: limit,
       include: {
