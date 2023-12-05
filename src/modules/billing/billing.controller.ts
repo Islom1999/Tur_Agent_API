@@ -38,19 +38,19 @@ export class BilingController {
     return this.paymentService.createCharge(dto, userId);
   }
 
-  @Public()
+  // @Public()
   @Get('')
   findAll() {
     return this.paymentService.findAll();
   }
 
-  @Public()
+  // @Public()
   @Get('pagination')
   findAllPercentage(@Query() queryDto: QueryDTO) {
     return this.paymentService.findAllPercentage(queryDto);
   }
 
-  @Public()
+  // @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.paymentService.findOne(id);
