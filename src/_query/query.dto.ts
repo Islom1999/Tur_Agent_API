@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class QueryDTO {
   @IsOptional()
@@ -14,4 +14,8 @@ export class QueryDTO {
   @IsOptional()
   @IsString()
   id?:string; 
+
+  @IsOptional()
+  @IsBoolean()
+  views?: boolean
 }

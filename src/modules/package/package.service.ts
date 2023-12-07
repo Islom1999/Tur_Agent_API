@@ -54,14 +54,20 @@ export class PackageService {
     const page = +queryDto.page || 1;
     const limit = +queryDto.limit || 25;
     const skip = (page - 1) * limit;
+    const views = queryDto?.views || false
+
     const count = await this._prisma.package.count({
       where: {
         country_id: queryDto?.id
       },
     });
 
+    const orderBy: { createdAt: 'asc' | 'desc' } | { views: 'asc' | 'desc' } = views
+    ? { createdAt: 'asc' }
+    : { views: 'desc' };
+
     const model = await this._prisma.package.findMany({
-      orderBy: { createdAt: 'asc' },
+      orderBy,
       where: {
         country_id: queryDto?.id
       },
@@ -108,6 +114,10 @@ export class PackageService {
       } 
     });
     if (!model) throw new HttpException('not found', HttpStatus.NOT_FOUND);
+    await this._prisma.package.update({
+      where: {id},
+      data:{ views:{ increment:1 } }
+    })
     return model;
   }
 

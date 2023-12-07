@@ -162,7 +162,8 @@ model Package {
   duration_ne String
   duration_id String
 
-  type Type @default(Personal)
+  type  Type @default(Personal)
+  views Int  @default(0)
 
   country    Country @relation(fields: [country_id], references: [id])
   country_id String
@@ -305,12 +306,12 @@ model Order {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  status StatusType @default(Waiting)
-  amount Int
-  person Int?
+  status      StatusType @default(Waiting)
+  amount      Int
+  person      Int?
   description String?
-  code   String?
-  date   String?
+  code        String?
+  date        String?
 
   client    Client @relation(fields: [client_id], references: [id])
   client_id String
