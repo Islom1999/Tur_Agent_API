@@ -7,7 +7,7 @@ import {
 import { PackageDto } from './dto/package.dto';
 import { PrismaService } from 'src/prisma';
 import { Prisma } from '@prisma/client';
-import { QueryDTO } from 'src/_query';
+import { QueryDTO, SortBase } from 'src/_query';
 import { ImageService } from '../image/image.service';
 
 @Injectable()
@@ -54,7 +54,7 @@ export class PackageService {
     const page = +queryDto.page || 1;
     const limit = +queryDto.limit || 25;
     const skip = (page - 1) * limit;
-    const views = queryDto?.views || false
+    const sort = queryDto?.sort
 
     const count = await this._prisma.package.count({
       where: {
@@ -62,9 +62,10 @@ export class PackageService {
       },
     });
 
-    const orderBy: { createdAt: 'asc' | 'desc' } | { views: 'asc' | 'desc' } = views
-    ? { createdAt: 'asc' }
-    : { views: 'desc' };
+    const orderBy: { createdAt: 'asc' | 'desc' } | { views: 'asc' | 'desc' } = 
+    sort == SortBase.Views 
+    ? { views: 'desc' }
+    : { createdAt: 'asc' }
 
     const model = await this._prisma.package.findMany({
       orderBy,

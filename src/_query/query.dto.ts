@@ -1,4 +1,9 @@
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+
+export enum SortBase {
+  Views = 'Views',
+  CreatedAt = 'CreatedAt'
+}
 
 export class QueryDTO {
   @IsOptional()
@@ -16,6 +21,6 @@ export class QueryDTO {
   id?:string; 
 
   @IsOptional()
-  @IsBoolean()
-  views?: boolean
+  @IsEnum(SortBase)
+  sort?: SortBase;
 }
