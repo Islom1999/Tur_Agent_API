@@ -112,12 +112,8 @@ export class PackageService {
         Routes: true,
         Highlight: true,
         Accommodation: {
-          region:{select :{
-          id: true,
-          name_en: true,
-          name_ru: true,
-          name_ne: true,
-          name_id: true
+          include:{
+            region:true
           }
         },
       } 
