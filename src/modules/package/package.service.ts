@@ -111,7 +111,9 @@ export class PackageService {
         }},
         Routes: true,
         Highlight: true,
-        Accommodation: true,
+        Accommodation: {
+          region:true,
+        },
       } 
     });
     if (!model) throw new HttpException('not found', HttpStatus.NOT_FOUND);
