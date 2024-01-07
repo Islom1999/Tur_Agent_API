@@ -15,6 +15,7 @@ import { HighlightModule } from './modules/highlight/highlight.module';
 import { AccommodationModule } from './modules/accommodation/accommodation.module';
 import { BilingModule } from './modules/billing/billing.module';
 import { AuthModule } from './auth/auth.module';
+import { BlogModule } from './modules/blog/blog.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuthModule } from './auth/auth.module';
     AccommodationModule,
     ImageModule,
     BilingModule,
+    BlogModule
   ],
   controllers: [],
   providers: [

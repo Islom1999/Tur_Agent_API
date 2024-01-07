@@ -276,6 +276,28 @@ model Partner {
   @@map("partner")
 }
 
+// Blog
+model Blog {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images String[]
+
+  title_en        String
+  title_ru        String
+  title_ne        String
+  title_id        String
+  description_en  String
+  description_ru  String
+  description_ne  String
+  description_id  String
+
+  date DateTime @default(now())
+
+  @@map("blog")
+}
+
 // User Clients
 model Client {
   id        String   @id @default(dbgenerated("gen_random_uuid()"))
