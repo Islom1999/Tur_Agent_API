@@ -23,7 +23,7 @@ jobs:
         username: ${{ env.SERVER_USERNAME }}
         key: ${{ env.SSH_PRIVATE_KEY }}
         script: |
-          cd ~/Tur_Agent_API
+          cd ~/Tur_Agent_API/
           git pull
           npm install
           npx prisma migrate dev
