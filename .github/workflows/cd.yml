@@ -6,7 +6,7 @@ on:
 
 env:
   SERVER_HOST: 91.200.151.163
-  SERVER_USERNAME: ubuntu
+  SERVER_USERNAME: root
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
 
