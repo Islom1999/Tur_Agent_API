@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  SERVER_HOST: 13.127.106.130
+  SERVER_HOST: 91.200.151.163
   SERVER_USERNAME: ubuntu
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
@@ -23,10 +23,10 @@ jobs:
         username: ${{ env.SERVER_USERNAME }}
         key: ${{ env.SSH_PRIVATE_KEY }}
         script: |
-          cd ~/projects/Tur_Agent_API
+          cd ~/Tur_Agent_API
           git pull
           npm install
           npx prisma migrate dev
           npx prisma generate
           npm run build
-          pm2 restart tur-agent
+          pm2 restart asia-api
